@@ -3,7 +3,7 @@
 **项目**: OpenVela 2026 硬件创新赛道
 **团队**: 金色传说 (#319)
 **AI 工具**: Claude (Anthropic)
-**记录周期**: 2026-08-24 ~ 2026-08-27
+**记录周期**: 2026-08-24 ~ 2026-08-30
 
 ---
 
@@ -103,5 +103,32 @@ logs/openureye/
 
 ---
 
+## 2026-08-30 工作记录
+
+### 编译问题修复
+
+**问题**: 编译contest工程时报错 `File Make.defs could not be found`
+
+**AI 分析**:
+- 分析 `build.sh` 和 `nuttx/tools/configure.sh` 脚本
+- 定位到 Make.defs 文件搜索路径
+- 发现contest board缺少必要的 Make.defs 文件
+
+**解决方案**:
+1. 创建 `board/contest_board/src/Make.defs` - 源文件列表
+2. 创建 `board/contest_board/configs/nsh/Make.defs` - 配置包含
+
+**结果**: 
+- ✅ Contest 工程编译成功，生成 `nuttx_ap.bin` (1.07MB)
+- ✅ BES AP 测试用例编译成功，生成 `nuttx_ap.bin` (1.6MB)
+
+### AI 辅助价值
+
+1. **脚本分析**: AI 快速理解 build.sh 和 configure.sh 的逻辑
+2. **问题定位**: 准确找到 Make.defs 搜索路径
+3. **代码生成**: 自动生成符合规范的 Make.defs 文件
+
+---
+
 **日志维护**: openureye team
-**最后更新**: 2026-08-27
+**最后更新**: 2026-08-30
