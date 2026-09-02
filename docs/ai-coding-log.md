@@ -3,7 +3,7 @@
 **项目**: OpenVela 2026 硬件创新赛道
 **团队**: 金色传说 (#319)
 **AI 工具**: Claude (Anthropic)
-**记录周期**: 2026-08-24 ~ 2026-08-30（持续更新）
+**记录周期**: 2026-08-24 ~ 2026-09-02（持续更新）
 
 ---
 
@@ -154,5 +154,145 @@ logs/openureye/
 
 ---
 
+---
+
+## 2026-09-02 工作记录
+
+### 烧录测试问题详细分析
+
+**背景**: 对 best1700_ep (BES2800BP) 板子进行烧录测试，遇到多个编译和烧录工具相关问题。
+
+#### 问题 1: defconfig 缺少 ARM 工具链配置
+
+**问题描述**:
+- configure.sh 生成的 .config 只有 396 行，缺少关键配置项
+- 缺少 `CONFIG_ARM_TOOLCHAIN_GNU_EABI=y`
+- 导致编译系统使用 host gcc 而非 ARM 交叉编译器
+
+**错误表现**:
+```
+arm-none-eabi-gcc: command not found
+```
+
+**AI 分析**:
+- 分析 .config 文件，发现缺少 ARM 工具链配置
+- 对比完整的 defconfig，识别缺失的配置项
+- 建议运行 `make olddefconfig` 展开完整配置
+
+**解决方案**:
+```bash
+# 在 defconfig 中添加
+CONFIG_ARM_TOOLCHAIN_GNU_EABI=y
+
+# 或运行 make olddefconfig 展开完整配置
+make olddefconfig
+```
+
+#### 问题 2: Kconfig choice symbol 错误
+
+**问题描述**:
+- Kconfig 文件中 select choice symbol 语法错误
+- NuttX 的 Kconfig 不支持直接 select choice 中的 symbol
+
+**错误表现**:
+```
+Kconfig: syntax error
+```
+
+**AI 分析**:
+- 分析 Kconfig 语法，发现 select choice symbol 的用法错误
+- 查阅 NuttX Kconfig 文档，确认正确的配置方式
+
+**解决方案**:
+- 移除错误的 select 语句
+- 改用 default 或 depends on 方式配置
+
+#### 问题 3: CONFIG_ALLSYMS 链接失败
+
+**问题描述**:
+- `CONFIG_ALLSYMS=y` 启用后，链接阶段失败
+- mkallsyms.py 脚本找不到 nuttx 二进制文件
+
+**错误表现**:
+```
+make[1]: *** [nuttx] Error 22
+mkallsyms.py: No such file or directory
+```
+
+**AI 分析**:
+- 分析链接错误，定位到 mkallsyms.py 脚本问题
+- 发现 CONFIG_ALLSYMS 依赖 nuttx 二进制文件，但链接阶段尚未生成
+- 建议禁用 CONFIG_ALLSYMS 避免循环依赖
+
+**解决方案**:
+```bash
+kconfig-tweak --disable CONFIG_ALLSYMS
+make olddefconfig
+make -j$(nproc)
+```
+
+#### 问题 4: .config 不完整问题
+
+**问题描述**:
+- configure.sh 生成的 .config 只有 396 行
+- 缺少 `CONFIG_ARCH_CORTEXM55=y`、`CONFIG_ARCH_ARMV8M=y` 等关键配置
+
+**AI 分析**:
+- 对比完整的 .config 文件（1000+ 行），识别缺失的配置项
+- 发现 configure.sh 只生成基础配置，需要 make olddefconfig 展开
+
+**解决方案**:
+```bash
+# 必须运行 make olddefconfig 展开完整配置
+make olddefconfig
+# 展开后 .config 应有 1000+ 行
+```
+
+#### 问题 5: 烧录工具限制
+
+**问题描述**:
+- BES SDK 提供的烧录工具 `dldtool.exe` 仅支持 Windows
+- 在 Linux 环境下无法直接使用
+- 之前尝试使用 Wine 运行，但兼容性问题多
+
+**错误表现**:
+```
+wine: cannot find dldtool.exe
+```
+
+**AI 分析**:
+- 搜索 openvela 源码树，发现 `vendor_bes/prebuild/m1/dldtool` 包含 Linux 原生工具
+- 对比 Windows 和 Linux 版本的差异
+- 确认 Linux 原生工具可以直接使用
+
+**解决方案**:
+```bash
+# 使用 Linux 原生 dldtool
+DLDTOOL=/home/h5/openvela/vendor_bes/prebuild/m1/dldtool
+PGM=/home/h5/openvela/vendor_bes/prebuild/programmer1700_dual.bin
+PORT=/dev/ttyUSB0
+
+# 仅更新 AP 分区
+$DLDTOOL --reboot $PORT -e 0x300000/0x820000 $PGM --addr 0x300000 nuttx_ap.bin
+```
+
+### AI 辅助价值总结
+
+1. **问题诊断**: AI 快速定位编译问题的根因，分析 .config 和 Kconfig 文件
+2. **解决方案**: AI 提供具体的修复命令和配置建议
+3. **工具发现**: AI 在源码树中搜索到 Linux 原生烧录工具
+4. **文档生成**: AI 自动生成详细的问题记录和解决方案文档
+
+### 当前状态
+
+| 项目 | 状态 |
+|------|------|
+| 编译 | ✅ 成功，生成 nuttx_ap.bin (1.6MB) |
+| 烧录工具 | ✅ Linux 原生 dldtool 可用 |
+| 硬件适配 | ✅ best1700_ep = BES2800BP，比赛方已适配 |
+| 赛道 | 硬件创新赛道（非硬件适配赛道） |
+
+---
+
 **日志维护**: openureye team
-**最后更新**: 2026-08-30
+**最后更新**: 2026-09-02

@@ -203,7 +203,17 @@
       "file_path": "logs/openureye/2026-08-24/claude-code__e620e4e0-a3cc-4df6-8c45-bba5b22f1d23.jsonl",
       "collection_mode": "cli",
       "health": "ok"
+    },
+    {
+      "session_id": "session-2026-09-02",
+      "tool": "claude-code",
+      "started_at": "2026-09-02T00:00:00.000Z",
+      "last_event_at": "2026-09-02T00:00:12.000Z",
+      "event_count": 12,
+      "file_path": "logs/openureye/2026-09-02/claude-code__session-2026-09-02.jsonl",
+      "collection_mode": "cli",
+      "health": "ok"
     }
   ],
-  "updated_at": "2026-08-27T15:45:16.877922+00:00"
+  "updated_at": "2026-09-02T00:00:00.000000+00:00"
 }
