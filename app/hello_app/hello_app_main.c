@@ -6,6 +6,6 @@
 
 int main(int argc, char *argv[])
 {
-  printf("Hello from openvela contest 2026 team 000!\n");
+  printf("Hello BES! Welcome to openvela contest 2026 - Team 金色传说!\n");
   return 0;
 }

@@ -1,0 +1,12 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config CONTEST2026_IMAGE_DISPLAY
+	bool "Contest 2026 Image Display App"
+	default n
+	depends on GRAPHICS_LVGL
+	---help---
+		Enable the contest 2026 image display application.
+		Demonstrates canvas drawing on the LCD screen.

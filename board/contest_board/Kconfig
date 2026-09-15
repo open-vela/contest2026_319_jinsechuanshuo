@@ -41,7 +41,8 @@ config SPI_IMU
 	default n
 	depends on BES_HAVE_SPI
 	select SENSORS_BMI160
-	select SENSORS_BMI160_SPI
+	# Note: SENSORS_BMI160_SPI is a choice symbol and cannot be selected
+	# The user must enable BMI160 SPI interface manually via menuconfig
 	---help---
 		Adds support for SPI IMU (BMI160) sensor.
 		Uses SPI0 with CS1 for IMU connection.

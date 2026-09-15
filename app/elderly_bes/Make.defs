@@ -1,5 +1,5 @@
 ############################################################################
-# contest2026_319_jinsechuanshuo/board/contest_board/configs/nsh/Make.defs
+# apps/examples/elderly_bes/Make.defs
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -18,22 +18,6 @@
 #
 ############################################################################
 
-include ${TOPDIR}/.config
-export CONFIG_ARCH_BOARD := nx_bestbsp_ap
-
-LDSCRIPT = _best1000.lds
-BES_ENTRY = --entry=Boot_Loader
-
-export BES_SDK_FLASGS := -DCHIP_BEST1700
-
-include ${TOPDIR}/tools/Config.mk
-include $(BOARD_DIR)/scripts/Make.defs
-
-define POSTBUILD
-    $(Q)echo "Generating: nuttx_ap.bin"; \
-    cp nuttx nuttx_ap.elf; \
-    cp nuttx.map nuttx_ap.map; \
-    cp nuttx.bin nuttx_ap.bin;
-    ${TOPDIR}/../vendor/bes/${CONFIG_BES_DDK_DIR}/tools/fill_sec_base.pl nuttx_ap.elf nuttx.bin nuttx_ap.bin;
-
-endef
+ifneq ($(CONFIG_EXAMPLES_ELDERLY_BES),)
+CONFIGURED_APPS += $(APPDIR)/examples/elderly_bes
+endif
