@@ -1,11 +1,67 @@
 #
-# Contest 2026 team 000 board placeholder
+# Contest 2026 team 319 - BES2800BP board
 #
 
-if ARCH_BOARD_CONTEST2026_000_BOARD
+if ARCH_BOARD_CONTEST2026_319_BOARD
 
-config ARCH_BOARD_CONTEST2026_000_BOARD_TAG
+config ARCH_BOARD_CONTEST2026_319_BOARD_TAG
 	string "Board tag"
-	default "contest2026_000_board"
+	default "contest2026_319_board"
 
-endif
+# SPI Flash FAT filesystem
+
+config SPI_FLASH_FATFS
+	bool "SPI Flash with FAT file system"
+	default n
+	depends on BES_HAVE_SPI
+	---help---
+		Adds support for SPI Flash with FAT file system.
+		Requires CONFIG_SPI, CONFIG_MTD, CONFIG_FS_FATFS, and CONFIG_FTL.
+
+if SPI_FLASH_FATFS
+
+config BES_SPI_FLASH_CSNUM
+	int "SPI Flash chip select number"
+	default 0
+	---help---
+		SPI chip select number for the SPI Flash device.
+
+config BES_SPI_FLASH_MOUNTPOINT
+	string "SPI Flash mount point"
+	default "/mnt/spiflash"
+	---help---
+		Mount point for the SPI Flash FAT file system.
+
+endif # SPI_FLASH_FATFS
+
+# BMI160 IMU sensor
+
+config SPI_IMU
+	bool "SPI IMU sensor support"
+	default n
+	depends on BES_HAVE_SPI
+	select SENSORS_BMI160
+	# Note: SENSORS_BMI160_SPI is a choice symbol and cannot be selected
+	# The user must enable BMI160 SPI interface manually via menuconfig
+	---help---
+		Adds support for SPI IMU (BMI160) sensor.
+		Uses SPI0 with CS1 for IMU connection.
+
+if SPI_IMU
+
+config BES_SPI_IMU_CSNUM
+	int "SPI IMU chip select number"
+	default 1
+	---help---
+		SPI chip select number for the IMU device.
+		Default is 1 (CS1), as CS0 is used by SPI Flash.
+
+config BES_SPI_IMU_DEVNAME
+	string "IMU device name"
+	default "/dev/accel0"
+	---help---
+		Device name for the IMU sensor.
+
+endif # SPI_IMU
+
+endif # ARCH_BOARD_CONTEST2026_319_BOARD
