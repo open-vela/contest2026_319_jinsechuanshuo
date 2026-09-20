@@ -1,7 +1,7 @@
 /****************************************************************************
- * apps/examples/elderly_bes/ui_common.c
+ * apps/examples/jinsechuanshuo_ballbes/ui_common.c
  *
- * Common utility functions for the Elderly Health Care LVGL application.
+ * Common utility functions for the Golden Legend Tennis LVGL application.
  ****************************************************************************/
 
 /****************************************************************************

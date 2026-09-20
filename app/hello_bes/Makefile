@@ -1,5 +1,5 @@
 ############################################################################
-# apps/examples/elderly_bes/Make.defs
+# apps/examples/hello_bes/Makefile
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -18,6 +18,17 @@
 #
 ############################################################################
 
-ifneq ($(CONFIG_EXAMPLES_ELDERLY_BES),)
-CONFIGURED_APPS += $(APPDIR)/examples/elderly_bes
-endif
+include $(APPDIR)/Make.defs
+
+# Hello BES built-in application info
+
+PROGNAME  = hello_bes
+PRIORITY  = 100
+STACKSIZE = 2048
+MODULE    = $(CONFIG_EXAMPLES_HELLO_BES)
+
+# Hello BES Example
+
+MAINSRC = hello_bes_main.c
+
+include $(APPDIR)/Application.mk

@@ -1,0 +1,16 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file tools/kconfig-language.txt in the NuttX tools repository.
+#
+
+config EXAMPLES_IMU
+	bool "\"imu\" MPU6500 motion sensor self-test"
+	default n
+	depends on SENSORS_MPU60X0 && MPU60X0_SPI
+	---help---
+		Probe the MPU6500 IMU over hardware SPI0 and print live
+		accel/gyro/temperature samples from /dev/imu0. Used to
+		verify the board wiring before wiring the sensor into
+		the tennis training app.
+
+		Usage (NSH):  imu [count]     # default 5 samples, 100ms apart

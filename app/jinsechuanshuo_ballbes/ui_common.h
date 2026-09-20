@@ -1,7 +1,7 @@
 /****************************************************************************
- * apps/examples/elderly_bes/ui_common.h
+ * apps/examples/jinsechuanshuo_ballbes/ui_common.h
  *
- * Common definitions for the Elderly Health Care LVGL application.
+ * Common definitions for the Golden Legend Tennis LVGL application.
  * Colors, screen dimensions, shared data structures, and page IDs.
  ****************************************************************************/
 
@@ -26,8 +26,8 @@
 
 /* Screen dimensions (circular AMOLED display) */
 
-#define SCREEN_WIDTH        CONFIG_EXAMPLES_ELDERLY_BES_SCREEN_WIDTH
-#define SCREEN_HEIGHT       CONFIG_EXAMPLES_ELDERLY_BES_SCREEN_HEIGHT
+#define SCREEN_WIDTH        CONFIG_EXAMPLES_JINSECHUANSHUO_BALL_BES_SCREEN_WIDTH
+#define SCREEN_HEIGHT       CONFIG_EXAMPLES_JINSECHUANSHUO_BALL_BES_SCREEN_HEIGHT
 #define SCREEN_RADIUS       (SCREEN_WIDTH < SCREEN_HEIGHT ? SCREEN_WIDTH / 2 : SCREEN_HEIGHT / 2)
 
 /* Safe margin for circular display */
@@ -48,19 +48,30 @@
 #define COLOR_GREEN          lv_color_hex(0x34C759)
 #define COLOR_BLUE           lv_color_hex(0x007AFF)
 #define COLOR_BLUE_DARK      lv_color_hex(0x0055CC)
+#define COLOR_GOLD           lv_color_hex(0xF5C518)
+#define COLOR_GOLD_DARK      lv_color_hex(0xB8860B)
+#define COLOR_CYAN           lv_color_hex(0x31E4C8)
 #define COLOR_YELLOW         lv_color_hex(0xFFCC00)
 #define COLOR_ORANGE         lv_color_hex(0xFF9500)
 #define COLOR_PROGRESS_BG    lv_color_hex(0x333333)
 #define COLOR_BORDER         lv_color_hex(0x333333)
 
-/* Vital sign normal ranges */
+/* Tennis match stats thresholds (themed on health ranges) */
 
-#define HR_LOW              55
-#define HR_HIGH             100
-#define SPO2_LOW            95
-#define TEMP_LOW            35.5f
-#define TEMP_HIGH           37.3f
-#define DAILY_STEPS_GOAL    6000
+#define SPEED_LOW            55
+#define SPEED_HIGH           100
+#define RALLY_LOW            95
+#define DAILY_STEPS_GOAL    6000   /* legacy: kept for shared context use */
+#define SERVES_GOAL          120   /* serves target per match */
+#define SERVES_GOAL_STR     "120"
+
+/* Legacy aliases kept for ui_common.c status helpers */
+
+#define HR_LOW               SPEED_LOW
+#define HR_HIGH              SPEED_HIGH
+#define SPO2_LOW             RALLY_LOW
+#define TEMP_LOW             35.5f
+#define TEMP_HIGH            37.3f
 
 /* SOS countdown seconds */
 
@@ -74,28 +85,34 @@
 
 typedef enum
 {
-  PAGE_INDEX = 0,
+  PAGE_INDEX = 0,            /* home: scoreboard + speed gauge */
+  PAGE_TRAIN,                /* training: ready/countdown/running */
+  PAGE_STATS,                /* stats: serve rings + rally meters */
   PAGE_COUNT
 } page_id_t;
 
-/* Vital sign data */
+/* Tennis match data (repurposed health fields, golden-legend theme) */
 
 typedef struct
 {
-  int32_t  heart_rate;       /* bpm */
-  int32_t  spo2;             /* percentage */
-  float    temperature;      /* celsius */
-  int32_t  steps;            /* daily step count */
+  int32_t  ball_speed;       /* km/h */
+  int32_t  rally_shots;      /* current rally shot count */
+  int32_t  scores[2];        /* [0]=our points, [1]=opponent points */
+  int32_t  serves;           /* serves so far this match */
+  int32_t  serves_set[3];    /* serves per set */
+  int32_t  rally_best;       /* best rally (shots) */
+  int32_t  points_won;       /* points won by us */
+  int32_t  points_total;     /* points played in match */
   int32_t  battery;          /* battery percentage */
   bool     device_online;    /* device connection status */
   uint64_t timestamp;        /* last update timestamp (ms) */
-} vital_data_t;
+} match_data_t;
 
 /* Application global context */
 
 typedef struct
 {
-  vital_data_t      vitals;
+  match_data_t      match;
   page_id_t         current_page;
   bool              network_connected;
 } app_context_t;

@@ -1,0 +1,18 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file tools/kconfig-language.txt in the NuttX tools repository.
+#
+
+config EXAMPLES_W25FS
+	bool "\"w25fs\" W25Q64 SPI Flash filesystem demo"
+	default n
+	select FSUTILS_MKFATFS
+	---help---
+		Register the on-board W25Q64 (Winbond SPI NOR, 8MB) as a block
+		device and mount a FAT filesystem at CONFIG_W25Q64_MOUNTPOINT.
+
+		Usage (NSH):
+		  w25fs              # probe + mount (auto-format if blank)
+		  w25fs format       # erase chip + build fresh FAT volume
+		  w25fs test         # write/read/delete a test file
+		  w25fs info         # geometry / capacity report

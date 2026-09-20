@@ -1,7 +1,7 @@
 /****************************************************************************
- * apps/examples/elderly_bes/elderly_main.c
+ * apps/examples/jinsechuanshuo_ballbes/jinsechuanshuo_ballbes_main.c
  *
- * Main entry point for the Elderly Health Care LVGL application.
+ * Main entry point for the Golden Legend Tennis LVGL application.
  * Minimal version for BES2800 round display - UI only.
  ****************************************************************************/
 
@@ -16,6 +16,7 @@
 
 #include <lvgl/lvgl.h>
 #include "ui_manager.h"
+#include "imu_feeder.h"
 
 /****************************************************************************
  * Pre-processor Definitions
@@ -31,7 +32,7 @@
  * Public Functions
  ****************************************************************************/
 
-int main(int argc, FAR char *argv[])
+int jinsechuanshuo_ballbes_main(int argc, FAR char *argv[])
 {
   lv_nuttx_dsc_t info;
   lv_nuttx_result_t result;
@@ -56,7 +57,7 @@ int main(int argc, FAR char *argv[])
 #endif
 
 #ifdef CONFIG_INPUT_TOUCHSCREEN
-  info.input_path = CONFIG_EXAMPLES_ELDERLY_BES_INPUT_DEVPATH;
+  info.input_path = CONFIG_EXAMPLES_JINSECHUANSHUO_BALL_BES_INPUT_DEVPATH;
 #endif
 
   lv_nuttx_init(&info, &result);
@@ -73,9 +74,17 @@ int main(int argc, FAR char *argv[])
 
   ui_manager_init();
 
+  /* Start the background MPU6500 feeder when a sensor is wired;
+   * demo values stay live otherwise. */
+
+  if (imu_feeder_start())
+    {
+      LV_LOG_USER("IMU feeder thread started.");
+    }
+
   LV_LOG_USER("UI ready. Entering main loop. Screen: %dx%d",
-              CONFIG_EXAMPLES_ELDERLY_BES_SCREEN_WIDTH,
-              CONFIG_EXAMPLES_ELDERLY_BES_SCREEN_HEIGHT);
+              CONFIG_EXAMPLES_JINSECHUANSHUO_BALL_BES_SCREEN_WIDTH,
+              CONFIG_EXAMPLES_JINSECHUANSHUO_BALL_BES_SCREEN_HEIGHT);
 
   /* Main event loop */
 

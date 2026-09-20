@@ -1,11 +1,11 @@
 /****************************************************************************
- * apps/examples/elderly_bes/ui_manager.h
+ * apps/examples/jinsechuanshuo_ballbes/ui_index.h
  *
- * Page manager: handles page creation, switching, and lifecycle.
+ * Home/Index page: tennis match stats (Golden Legend theme).
  ****************************************************************************/
 
-#ifndef __UI_MANAGER_H
-#define __UI_MANAGER_H
+#ifndef __UI_INDEX_H
+#define __UI_INDEX_H
 
 /****************************************************************************
  * Included Files
@@ -18,33 +18,21 @@
  ****************************************************************************/
 
 /**
- * Initialize the UI manager and create all pages.
+ * Create the index/home page.
  */
 
-void ui_manager_init(void);
+lv_obj_t *ui_index_create(lv_obj_t *parent);
 
 /**
- * Switch to a different page.
+ * Update the tennis stat cards (speed / rally / score).
  */
 
-void ui_manager_switch_page(page_id_t page);
+void ui_index_update_vitals(void);
 
 /**
- * Get a page object by ID.
+ * Update the serve progress bar.
  */
 
-lv_obj_t *ui_manager_get_page(page_id_t page);
+void ui_index_update_steps(void);
 
-/**
- * Refresh the current page data.
- */
-
-void ui_manager_refresh(void);
-
-/**
- * Get the content layer object.
- */
-
-lv_obj_t *ui_manager_get_layer(void);
-
-#endif /* __UI_MANAGER_H */
+#endif /* __UI_INDEX_H */

@@ -1,11 +1,11 @@
 /****************************************************************************
- * apps/examples/elderly_bes/ui_index.h
+ * apps/examples/jinsechuanshuo_ballbes/ui_manager.h
  *
- * Home/Index page: vital signs cards, step progress.
+ * Page manager: handles page creation, switching, and lifecycle.
  ****************************************************************************/
 
-#ifndef __UI_INDEX_H
-#define __UI_INDEX_H
+#ifndef __UI_MANAGER_H
+#define __UI_MANAGER_H
 
 /****************************************************************************
  * Included Files
@@ -18,21 +18,33 @@
  ****************************************************************************/
 
 /**
- * Create the index/home page.
+ * Initialize the UI manager and create all pages.
  */
 
-lv_obj_t *ui_index_create(lv_obj_t *parent);
+void ui_manager_init(void);
 
 /**
- * Update vital sign display values.
+ * Switch to a different page.
  */
 
-void ui_index_update_vitals(void);
+void ui_manager_switch_page(page_id_t page);
 
 /**
- * Update step count display.
+ * Get a page object by ID.
  */
 
-void ui_index_update_steps(void);
+lv_obj_t *ui_manager_get_page(page_id_t page);
 
-#endif /* __UI_INDEX_H */
+/**
+ * Refresh the current page data.
+ */
+
+void ui_manager_refresh(void);
+
+/**
+ * Get the content layer object.
+ */
+
+lv_obj_t *ui_manager_get_layer(void);
+
+#endif /* __UI_MANAGER_H */
